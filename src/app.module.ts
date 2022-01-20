@@ -3,6 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 import { Contact } from './contact-book/common/dto/contact.entity';
 import { ContactBookModule } from './contact-book/contact-book.module';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { ContactBookModule } from './contact-book/contact-book.module';
       synchronize: true,
       cache: true,
     }),
+    UsersModule,
+    AuthModule,
   ],
 })
 export class AppModule {
