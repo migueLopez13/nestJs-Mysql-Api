@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:5.7
+    container_name: ${MYSQL_HOST}
+    volumes:
+      - .nestjs_mysql_data:/var/lib/mysql
+    ports:
+      - '${MYSQL_PORT}:${MYSQL_PORT}'
+    environment:
+      MYSQL_TCP_PORT: ${MYSQL_PORT}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DB_NAME}
+
+  nestjs:
+    container_name: nestjs_api
+    restart: always
+    build: .
+    volumes:
+      - .:/var/www
+      - ./src:/var/www/src
+      - ./test:/var/www/test
+    working_dir: /var/www/
+    ports:
+      - 3000:3000
+    links:
+      - 'db:database'
+    depends_on:
+      - 'db:database'
