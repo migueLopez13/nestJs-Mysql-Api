@@ -5,7 +5,7 @@ services:
     image: mysql:5.7
     container_name: ${MYSQL_HOST}
     volumes:
-      - .nestjs_mysql_data:/var/lib/mysql
+      - nestjs_mysql_data:/var/lib/mysql
     ports:
       - '${MYSQL_PORT}:${MYSQL_PORT}'
     environment:
