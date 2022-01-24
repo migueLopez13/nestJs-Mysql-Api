@@ -16,7 +16,7 @@ exports.ContactBookService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
-const contact_entity_1 = require("./common/dto/contact.entity");
+const contact_entity_1 = require("../common/entities/contact.entity");
 const uuid_1 = require("uuid");
 let ContactBookService = class ContactBookService {
     constructor(contactRepository) {
@@ -28,8 +28,12 @@ let ContactBookService = class ContactBookService {
     find(id) {
         return this.contactRepository.findOne(id);
     }
+    async findByName(name) {
+        const contacts = await this.contactRepository.find();
+        return contacts.filter((contact) => contact.name === name)[0];
+    }
     async create(contact) {
-        if (contact.id === undefined) {
+        if (!contact.id) {
             return this.createNewContact(contact);
         }
         const oldContact = await this.contactRepository.findOne(contact.id);

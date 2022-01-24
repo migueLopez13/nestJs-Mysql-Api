@@ -13,10 +13,8 @@ exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
-const contact_entity_1 = require("./contact-book/common/dto/contact.entity");
+const contact_entity_1 = require("./common/entities/contact.entity");
 const contact_book_module_1 = require("./contact-book/contact-book.module");
-const users_module_1 = require("./users/users.module");
-const auth_module_1 = require("./auth/auth.module");
 const redisStore = require("cache-manager-redis-store");
 let AppModule = class AppModule {
     constructor(connection) {
@@ -44,8 +42,6 @@ AppModule = __decorate([
                 synchronize: true,
                 cache: true,
             }),
-            users_module_1.UsersModule,
-            auth_module_1.AuthModule,
         ],
     }),
     __metadata("design:paramtypes", [typeorm_2.Connection])

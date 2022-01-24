@@ -1,8 +1,8 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Contact as ContactTable } from './common/dto/contact.entity';
-import { Contact } from './common/interface/contact.interface';
+import { Contact as ContactTable } from '../common/entities/contact.entity';
+import { Contact } from '../common/interface/contact.interface';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
@@ -20,8 +20,13 @@ export class ContactBookService {
     return this.contactRepository.findOne(id);
   }
 
+  async findByName(name: string): Promise<ContactTable> {
+    const contacts = await this.contactRepository.find();
+    return contacts.filter((contact) => contact.name === name)[0];
+  }
+
   async create(contact: Contact) {
-    if (contact.id === undefined) {
+    if (!contact.id) {
       return this.createNewContact(contact);
     }
     const oldContact = await this.contactRepository.findOne(contact.id);

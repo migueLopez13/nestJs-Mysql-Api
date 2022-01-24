@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
-const contact_book_service_1 = require("../contact-book/contact-book.service");
+const contact_book_service_1 = require("./contact-book.service");
 const jwt_1 = require("@nestjs/jwt");
 let AuthService = class AuthService {
     constructor(contactBookService, jwtService) {
@@ -24,7 +24,7 @@ let AuthService = class AuthService {
     }
     async generateAccessToken(name) {
         const contact = await this.contactBookService.findByName(name);
-        const payload = { userId: contact.id };
+        const payload = { contactId: contact.id };
         return {
             access_token: this.jwtService.sign(payload),
         };

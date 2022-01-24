@@ -6,14 +6,20 @@ import {
   Param,
   Post,
   Put,
+  UnauthorizedException,
   ValidationPipe,
 } from '@nestjs/common';
 import { ContactBookService } from './contact-book.service';
-import { ContactDTO } from './common/dto/contact.dto';
+import { ContactDTO } from '../common/dto/contact.dto';
+import { LoginDto } from 'src/common/dto/login.dto';
+import { AuthService } from './auth.service';
 
 @Controller('contact-book')
 export class ContactBookController {
-  constructor(private readonly contactBookService: ContactBookService) {}
+  constructor(
+    private readonly contactBookService: ContactBookService,
+    private readonly authService: AuthService,
+  ) {}
 
   @Get(':id')
   findContact(@Param('id') params) {
@@ -38,5 +44,15 @@ export class ContactBookController {
   @Delete(':id')
   delete(@Param('id') params) {
     this.contactBookService.delete(params.id);
+  }
+
+  @Post('/login')
+  async login(@Body() userLogin: LoginDto) {
+    const { name, password } = userLogin;
+    const valid = await this.authService.validateContact(name, password);
+    if (!valid) {
+      throw new UnauthorizedException();
+    }
+    return await this.authService.generateAccessToken(name);
   }
 }

@@ -15,10 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ContactBookController = void 0;
 const common_1 = require("@nestjs/common");
 const contact_book_service_1 = require("./contact-book.service");
-const contact_dto_1 = require("./common/dto/contact.dto");
+const contact_dto_1 = require("../common/dto/contact.dto");
+const login_dto_1 = require("../common/dto/login.dto");
+const auth_service_1 = require("./auth.service");
 let ContactBookController = class ContactBookController {
-    constructor(contactBookService) {
+    constructor(contactBookService, authService) {
         this.contactBookService = contactBookService;
+        this.authService = authService;
     }
     findContact(params) {
         return this.contactBookService.find(params.id);
@@ -34,6 +37,14 @@ let ContactBookController = class ContactBookController {
     }
     delete(params) {
         this.contactBookService.delete(params.id);
+    }
+    async login(userLogin) {
+        const { name, password } = userLogin;
+        const valid = await this.authService.validateContact(name, password);
+        if (!valid) {
+            throw new common_1.UnauthorizedException();
+        }
+        return await this.authService.generateAccessToken(name);
     }
 };
 __decorate([
@@ -71,9 +82,17 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], ContactBookController.prototype, "delete", null);
+__decorate([
+    (0, common_1.Post)('/login'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [login_dto_1.LoginDto]),
+    __metadata("design:returntype", Promise)
+], ContactBookController.prototype, "login", null);
 ContactBookController = __decorate([
     (0, common_1.Controller)('contact-book'),
-    __metadata("design:paramtypes", [contact_book_service_1.ContactBookService])
+    __metadata("design:paramtypes", [contact_book_service_1.ContactBookService,
+        auth_service_1.AuthService])
 ], ContactBookController);
 exports.ContactBookController = ContactBookController;
 //# sourceMappingURL=contact-book.controller.js.map

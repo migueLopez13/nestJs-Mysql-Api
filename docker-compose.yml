@@ -1,15 +1,17 @@
-version: '3.8'
+version: '3.3'
 
 services:
   db:
-    image: mysql:5.7
+    image: mysql
     container_name: ${MYSQL_HOST}
     volumes:
-      - nestjs_mysql_data:/var/lib/mysql
+      - ./data:/var/lib/mysql
     ports:
       - '${MYSQL_PORT}:${MYSQL_PORT}'
     environment:
       MYSQL_TCP_PORT: ${MYSQL_PORT}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_USER_PASS}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DB_NAME}
 
@@ -49,7 +51,6 @@ services:
     image: redis:6.2-alpine
     ports:
       - '6379:6379'
-    command: 
-      redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWD}
+    command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWD}
     volumes:
-      - .nestjs_mysql_data:/data
+      - ./data:/data
