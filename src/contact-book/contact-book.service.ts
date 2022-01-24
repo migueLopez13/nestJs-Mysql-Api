@@ -38,11 +38,11 @@ export class ContactBookService {
     return this.contactRepository.insert(contact);
   }
 
-  update(id: number, contactToUpdate: Contact): Promise<any> {
+  update(id: string, contactToUpdate: Contact): Promise<any> {
     return this.contactRepository.update(id, contactToUpdate);
   }
 
-  delete(id: number): Promise<any> {
+  delete(id: string): Promise<any> {
     return this.contactRepository.delete(id);
   }
 }
