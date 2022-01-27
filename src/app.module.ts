@@ -2,8 +2,10 @@ import { Module, CacheModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 import { Contact } from './common/entities/contact.entity';
-import { ContactBookModule } from './contact-book/contact-book.module';
+import { ContactBookModule } from './modules/contact-book/contact-book.module';
 import * as redisStore from 'cache-manager-redis-store';
+import { AuthModule } from './modules/auth/auth.module';
+import { Credential } from './common/entities/credential.entity';
 
 @Module({
   imports: [
@@ -14,6 +16,7 @@ import * as redisStore from 'cache-manager-redis-store';
       password: 'eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81',
     }),
     ContactBookModule,
+    AuthModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'db',
@@ -21,7 +24,7 @@ import * as redisStore from 'cache-manager-redis-store';
       username: 'root',
       password: 'root',
       database: 'contact_book',
-      entities: [Contact],
+      entities: [Contact, Credential],
       synchronize: true,
       cache: true,
     }),

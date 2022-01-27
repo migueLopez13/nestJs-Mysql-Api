@@ -1,57 +1,43 @@
-import { Entity, Column, PrimaryColumn, BeforeInsert } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import { Entity, Column, PrimaryColumn } from 'typeorm';
 
-@Entity()
+@Entity('contact')
 export class Contact {
-  @PrimaryColumn('uuid')
+  @PrimaryColumn('varchar', { length: 200 })
   id: string;
 
-  @Column()
+  @Column('varchar', { length: 10 })
   dni: string;
 
-  @Column()
-  password: string;
-
-  @Column()
+  @Column('varchar', { length: 50, unique: true })
   name: string;
 
-  @Column()
+  @Column('varchar', { length: 50 })
   surname: string;
 
-  @Column()
+  @Column('varchar', { length: 20 })
   phone: string;
 
-  @Column()
+  @Column('varchar', { length: 10 })
   gender: string;
 
-  @Column()
+  @Column('varchar', { length: 200 })
   address: string;
-
-  @BeforeInsert()
-  async hashPassword() {
-    const salt = await bcrypt.genSalt();
-    this.password = await bcrypt.hash(this.password, salt);
-  }
-
-  async validatePassword(password: string): Promise<boolean> {
-    return this.password === password;
-  }
 
   constructor(
     id: string,
     dni: string,
-    password: string,
     name: string,
     surname: string,
     phone: string,
+    address: string,
     gender: string,
   ) {
     this.id = id;
     this.dni = dni;
-    this.password = password;
     this.name = name;
     this.surname = surname;
     this.phone = phone;
+    this.address = address;
     this.gender = gender;
   }
 }

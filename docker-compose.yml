@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.8'
 
 services:
   db:
@@ -14,6 +14,8 @@ services:
       MYSQL_PASSWORD: ${MYSQL_USER_PASS}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DB_NAME}
+    env_file:
+      - .env
 
   nestjs:
     container_name: nestjs_api
@@ -46,6 +48,8 @@ services:
       PMA_ARBITRARY: 1
     ports:
       - 8081:80
+    env_file:
+      - .env
 
   redis:
     image: redis:6.2-alpine
