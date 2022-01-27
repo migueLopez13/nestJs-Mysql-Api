@@ -74,7 +74,9 @@ Nest is [MIT licensed](LICENSE).
 
 ## Run docker
 
+Rename .env.docker -> .env
+
 ```bash
 # development
-$ docker-compose --env-file .env.docker up
+$ docker-compose up
 ```
