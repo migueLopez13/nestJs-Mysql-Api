@@ -6,6 +6,7 @@ import { ContactBookModule } from './modules/contact-book/contact-book.module';
 import * as redisStore from 'cache-manager-redis-store';
 import { AuthModule } from './modules/auth/auth.module';
 import { Credential } from './common/entities/credential.entity';
+import environment from './enviroment';
 
 @Module({
   imports: [
@@ -19,10 +20,10 @@ import { Credential } from './common/entities/credential.entity';
     AuthModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'db',
+      host: environment.MYSQL_HOST,
       port: 3308,
-      username: 'root',
-      password: 'root',
+      username: environment.MYSQL_USER,
+      password: environment.MYSQL_USER_PASS,
       database: 'contact_book',
       entities: [Contact, Credential],
       synchronize: true,
