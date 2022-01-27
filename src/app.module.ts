@@ -24,7 +24,7 @@ import environment from './enviroment';
       port: 3308,
       username: environment.MYSQL_USER,
       password: environment.MYSQL_USER_PASS,
-      database: 'contact_book',
+      database: environment.MYSQL_DB_NAME,
       entities: [Contact, Credential],
       synchronize: true,
       cache: true,
