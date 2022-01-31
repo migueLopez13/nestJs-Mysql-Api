@@ -12,16 +12,14 @@ import environment from './enviroment';
   imports: [
     CacheModule.register({
       store: redisStore,
-      host: 'redis',
-      port: 6379,
+      host: environment.REDIS_HOST,
+      port: environment.REDIS_PORT,
       password: environment.REDIS_PASSWD,
     }),
-    ContactBookModule,
-    AuthModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: environment.MYSQL_HOST,
-      port: 3308,
+      port: environment.MYSQL_PORT,
       username: environment.MYSQL_USER,
       password: environment.MYSQL_USER_PASS,
       database: environment.MYSQL_DB_NAME,
@@ -29,6 +27,8 @@ import environment from './enviroment';
       synchronize: true,
       cache: true,
     }),
+    ContactBookModule,
+    AuthModule,
   ],
 })
 export class AppModule {
