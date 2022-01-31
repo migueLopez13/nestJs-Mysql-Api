@@ -1,5 +1,6 @@
 import {
   BeforeInsert,
+  BeforeUpdate,
   Column,
   Entity,
   JoinColumn,
@@ -25,6 +26,7 @@ export class Credential {
     return await bcrypt.compareSync(password, this.password);
   }
 
+  @BeforeUpdate()
   @BeforeInsert()
   async hashPassword() {
     const salt = await bcrypt.genSalt();

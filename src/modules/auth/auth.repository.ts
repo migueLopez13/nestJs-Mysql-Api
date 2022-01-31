@@ -1,44 +1,34 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CredentialDTO } from 'src/common/dto/credential.dto';
+import { Contact } from 'src/common/entities/contact.entity';
 import { Credential } from 'src/common/entities/credential.entity';
 import { Repository } from 'typeorm';
-
 import { JWTPayload } from './jwt.payload';
-import { CredentialMapper } from './mappers/credential.mapper';
 
 @Injectable()
 export class AuthRepository {
   constructor(
     @InjectRepository(Credential)
     private readonly credentialRepository: Repository<Credential>,
-    private readonly mapper: CredentialMapper,
+    @InjectRepository(Contact)
+    private readonly contactRepository: Repository<Contact>,
     private jwtService: JwtService,
   ) {}
 
-  async validateContact(contactId: string, pass: string): Promise<boolean> {
-    const credential = await this.credentialRepository.findOne(contactId);
-    return await credential.validatePassword(pass);
+  async validateContact(name: string, password: string): Promise<boolean> {
+    const contact = await this.contactRepository.findOne({ name });
+    const credential = await this.credentialRepository.findOne({
+      contactId: contact.id,
+    });
+    return await credential.validatePassword(password);
   }
 
-  async generateAccessToken(contactId: string) {
-    const payload: JWTPayload = { contactId: contactId };
+  async generateAccessToken(name: string) {
+    const contact = await this.contactRepository.findOne({ name });
+    const payload: JWTPayload = { contactId: contact.id };
     return {
       access_token: this.jwtService.sign(payload),
     };
-  }
-  async findByContactId(id: string): Promise<CredentialDTO> {
-    return this.mapper.entityToDto(await this.credentialRepository.findOne(id));
-  }
-
-  async create(credential: CredentialDTO) {
-    return this.credentialRepository.insert(
-      this.mapper.dtoToEntity(credential),
-    );
-  }
-
-  update(id: string, credentialToUpdate: CredentialDTO): Promise<any> {
-    return this.credentialRepository.update(id, credentialToUpdate);
   }
 }

@@ -3,7 +3,7 @@ import { config } from 'dotenv';
 config();
 
 const environment = {
-  MYSQL_HOST: process.env.MYSQL_HOST,
+  MYSQL_HOST: process.env.MYSQL_HOST || 'localhost',
   MYSQL_PORT: Number(process.env.MYSQL_PORT),
   MYSQL_DB_NAME: process.env.MYSQL_DB_NAME,
   MYSQL_USER: process.env.MYSQL_USER,

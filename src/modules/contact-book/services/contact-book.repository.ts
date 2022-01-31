@@ -25,20 +25,27 @@ export class ContactBookRepository {
   }
 
   async create(contact: ContactDTO) {
-    const user = this.contactRepository.insert(
+    const user = await this.contactRepository.insert(
       this.mapper.dtoToEntity(contact),
     );
-    this.credentialRepository.insert(
+    await this.credentialRepository.insert(
       new Credential(contact.id, contact.password),
     );
     return user;
   }
 
-  update(id: string, contactToUpdate: ContactDTO): Promise<any> {
+  async update(id: string, contactToUpdate: ContactDTO): Promise<any> {
+    const credential = await this.credentialRepository.findOne(id);
+    this.credentialRepository.update(
+      credential.id,
+      new Credential(contactToUpdate.id, contactToUpdate.password),
+    );
     return this.contactRepository.update(id, contactToUpdate);
   }
 
-  delete(id: string): Promise<any> {
+  async delete(id: string): Promise<any> {
+    const credential = await this.credentialRepository.findOne(id);
+    await this.credentialRepository.delete(credential.id);
     return this.contactRepository.delete(id);
   }
 }
