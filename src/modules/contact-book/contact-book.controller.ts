@@ -9,40 +9,40 @@ import {
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
-import { ContactBookRepository } from './services/contact-book.repository';
 import { ContactDTO } from '../../common/dto/contact.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { ContactService } from './contact.service';
 
 @Controller('contact-book')
 export class ContactBookController {
-  constructor(private readonly contactBookRepository: ContactBookRepository) {}
+  constructor(private readonly contactService: ContactService) {}
 
   @Get()
   @UseGuards(AuthGuard('jwt'))
   find() {
-    return this.contactBookRepository.findAll();
+    return this.contactService.findAll();
   }
 
   @Get(':id')
   @UseGuards(AuthGuard('jwt'))
   findOne(@Param('id') params) {
-    return this.contactBookRepository.findOne(params.id);
+    return this.contactService.findOne(params.id);
   }
 
   @Post()
   create(@Body(ValidationPipe) contact: ContactDTO) {
-    return this.contactBookRepository.create(contact);
+    return this.contactService.create(contact);
   }
 
   @Put(':id')
   @UseGuards(AuthGuard('jwt'))
   update(@Param('id') params, @Body(ValidationPipe) contact: ContactDTO) {
-    this.contactBookRepository.update(params.id, contact);
+    this.contactService.update(params.id, contact);
   }
 
   @Delete(':id')
   @UseGuards(AuthGuard('jwt'))
   delete(@Param('id') params) {
-    this.contactBookRepository.delete(params.id);
+    this.contactService.delete(params.id);
   }
 }

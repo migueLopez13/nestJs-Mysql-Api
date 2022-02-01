@@ -3,12 +3,12 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ContactDTO } from 'src/common/dto/contact.dto';
 import environment from 'src/enviroment';
-import { ContactBookRepository } from 'src/modules/contact-book/services/contact-book.repository';
-import { JWTPayload } from '../jwt.payload';
+import { ContactService } from 'src/modules/contact-book/contact.service';
+import { JWTPayload } from '../payload/jwt.payload';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private contactRespository: ContactBookRepository) {
+  constructor(private contact: ContactService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -17,7 +17,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JWTPayload): Promise<ContactDTO> {
-    const contact = await this.contactRespository.findOne(payload.contactId);
+    const contact = await this.contact.findOne(payload.contactId);
     if (!contact) {
       throw new UnauthorizedException();
     }

@@ -6,18 +6,18 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { LoginDTO } from 'src/common/dto/login.dto';
-import { AuthRepository } from './auth.repository';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authRepository: AuthRepository) {}
+  constructor(private auth: AuthService) {}
 
   @Post('/login')
   async login(@Body(ValidationPipe) { name, password }: LoginDTO) {
-    const valid = await this.authRepository.validateContact(name, password);
+    const valid = await this.auth.validateContact(name, password);
     if (!valid) {
       throw new UnauthorizedException();
     }
-    return await this.authRepository.generateAccessToken(name);
+    return await this.auth.generateAccessToken(name);
   }
 }

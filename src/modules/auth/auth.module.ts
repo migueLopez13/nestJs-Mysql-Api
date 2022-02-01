@@ -7,9 +7,12 @@ import { Credential } from 'src/common/entities/credential.entity';
 import environment from 'src/enviroment';
 import { ContactBookModule } from '../contact-book/contact-book.module';
 import { AuthController } from './auth.controller';
-import { AuthRepository } from './auth.repository';
-import { CredentialMapper } from './mappers/credential.mapper';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { AuthService } from './auth.service';
+import { ContactMapper } from 'src/shared/mappers/contact.mapper';
+import { CredentialMapper } from 'src/shared/mappers/credential.mapper';
+import { AuthRepository } from 'src/shared/repositories/auth.repository';
+import { ContactBookRepository } from 'src/shared/repositories/contact-book.repository';
 
 @Module({
   imports: [
@@ -22,7 +25,14 @@ import { JwtStrategy } from './strategies/jwt.strategy';
     TypeOrmModule.forFeature([Contact, Credential]),
   ],
   controllers: [AuthController],
-  providers: [AuthRepository, CredentialMapper, JwtStrategy],
-  exports: [AuthRepository],
+  providers: [
+    JwtStrategy,
+    AuthService,
+    ContactBookRepository,
+    AuthRepository,
+    ContactMapper,
+    CredentialMapper,
+  ],
+  exports: [AuthService],
 })
 export class AuthModule {}

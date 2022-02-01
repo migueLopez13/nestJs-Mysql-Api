@@ -30,6 +30,7 @@ import environment from './enviroment';
     ContactBookModule,
     AuthModule,
   ],
+  providers: [],
 })
 export class AppModule {
   constructor(private connection: Connection) {}
