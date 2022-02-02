@@ -33,6 +33,6 @@ import { ContactBookRepository } from 'src/shared/repositories/contact-book.repo
     ContactMapper,
     CredentialMapper,
   ],
-  exports: [AuthService],
+  exports: [AuthService, JwtModule],
 })
 export class AuthModule {}

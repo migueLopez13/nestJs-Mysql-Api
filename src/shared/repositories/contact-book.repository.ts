@@ -20,7 +20,7 @@ export class ContactBookRepository {
   findOneByName = (name: string) => this.contactRepository.findOne({ name });
 
   insert = (contact: ContactDTO) =>
-    this.contactRepository.create(this.mapper.dtoToEntity(contact));
+    this.contactRepository.insert(this.mapper.dtoToEntity(contact));
 
   update = (id: string, contactToUpdate: ContactDTO) =>
     this.contactRepository.update(id, this.mapper.dtoToEntity(contactToUpdate));

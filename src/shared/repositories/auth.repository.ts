@@ -17,7 +17,7 @@ export class AuthRepository {
     this.authRepository.findOne({ contactId: id });
 
   insert = (contact: ContactDTO) =>
-    this.authRepository.create(this.mapper.entityFromContactDTO(contact));
+    this.authRepository.insert(this.mapper.entityFromContactDTO(contact));
 
   updateByContact = async (contactId: string, contactToUpdate: ContactDTO) =>
     this.authRepository.update(

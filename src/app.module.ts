@@ -1,4 +1,9 @@
-import { Module, CacheModule } from '@nestjs/common';
+import {
+  Module,
+  CacheModule,
+  MiddlewareConsumer,
+  RequestMethod,
+} from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 import { Contact } from './common/entities/contact.entity';
@@ -7,6 +12,7 @@ import * as redisStore from 'cache-manager-redis-store';
 import { AuthModule } from './modules/auth/auth.module';
 import { Credential } from './common/entities/credential.entity';
 import environment from './enviroment';
+import { LoggerMiddleware } from './middleware/logger.middleware';
 
 @Module({
   imports: [
@@ -34,4 +40,10 @@ import environment from './enviroment';
 })
 export class AppModule {
   constructor(private connection: Connection) {}
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      .exclude({ path: 'contact-book', method: RequestMethod.POST })
+      .forRoutes('/contact-book');
+  }
 }

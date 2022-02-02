@@ -19,8 +19,9 @@ export class ContactService {
   }
 
   create(contact: ContactDTO) {
-    this.contactRepository.insert(contact);
+    const user = this.contactRepository.insert(contact);
     this.authRepository.insert(contact);
+    return user;
   }
 
   update(id: string, contactToUpdate: ContactDTO): Promise<any> {
