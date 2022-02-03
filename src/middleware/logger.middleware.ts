@@ -14,7 +14,15 @@ export class LoggerMiddleware implements NestMiddleware {
     ) {
       return res.status(403).send({ message: 'invalid authorization' });
     }
+
     const token = req.headers.authorization.split(' ')[1];
+
+    if (!this.jwtService.verify(token)) {
+      return res.status(403).send({
+        message: 'token has expired, please you must authenticate again',
+      });
+    }
+
     const payload: JWTPayload = this.jwtService.decode(token) as {
       contactId: string;
     };

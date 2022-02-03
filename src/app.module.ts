@@ -30,7 +30,7 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
       password: environment.MYSQL_USER_PASS,
       database: environment.MYSQL_DB_NAME,
       entities: [Contact, Credential],
-      synchronize: true,
+      synchronize: false,
       cache: true,
     }),
     ContactBookModule,
