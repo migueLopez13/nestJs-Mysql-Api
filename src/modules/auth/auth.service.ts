@@ -25,4 +25,10 @@ export class AuthService {
       access_token: this.jwtService.sign(payload),
     };
   }
+
+  getPayload(token: string) {
+    return this.jwtService.decode(token) as {
+      contactId: string;
+    };
+  }
 }

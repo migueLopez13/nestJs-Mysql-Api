@@ -12,6 +12,10 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private auth: AuthService) {}
 
+  @Post()
+  async getPayload(@Body(ValidationPipe) token: string) {
+    return this.auth.getPayload(token);
+  }
   @Post('/login')
   async login(@Body(ValidationPipe) { name, password }: LoginDTO) {
     const valid = await this.auth.validateContact(name, password);
